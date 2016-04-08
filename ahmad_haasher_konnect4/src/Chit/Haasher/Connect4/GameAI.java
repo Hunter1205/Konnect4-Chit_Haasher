@@ -2,29 +2,36 @@ package Chit.Haasher.Connect4;
 import java.util.Random;
 
 /**
- * this is the weak AI, it just picks a number between 1 and 6 to drop into the board
- * just needs the column to throw it in, and a boolean to know if it is it's turn
- * @author Haasher
+ * AI class implements a weak AI, it just picks a number between 1 and 6 (column number)
+ * @author Haasher and Chit
  */
 
 public class GameAI {
 	private int move;
 	
 /**
- * constructor just intakes if it is the computer's turn. 
- * @return
+ * Used to send out AI move
+ * @return move
  */
-	public int getMove(){
+	public int getMove()
+	{
 		return move;
 	}
 	 
-	public void setMove(){
+/**
+ * set Method to prompt the AI move	
+ */
+	public void setMove()
+	{
 		move();
 	}
 	
-	private void move(){
+/**
+ * Generate move of AI	
+ */
+	private void move()
+	{
 		Random rand = new Random();
-		
 		this.move = rand.nextInt(6)+1;  
 	}
 	

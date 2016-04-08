@@ -1,13 +1,10 @@
 package Chit.Haasher.Connect4;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
- * Main driver of Entire Game. This class allows the board to be enabled 
- * and for every method and conditions to run. It allows the player to choose
- * which mode to play and initialize the entire game.
- * This also when run, gives the player the rules and what to do.
- * @author Haasher
+ *Driver initializes the game and gets user input for choice of game mode
+ *Passes the choice of game mode to initialize the board
+ * @author Haasher and Chit
+ * @version 15.1998
  */
 
 public class Driver{	

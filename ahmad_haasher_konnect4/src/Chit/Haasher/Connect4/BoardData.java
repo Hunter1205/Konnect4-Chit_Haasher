@@ -8,10 +8,10 @@ import javax.swing.JOptionPane;
 /**
  * This class creates 2 ArrayLists for data entry and turns.
  * This class also creates the board and display of the board.
- * This class also declares the the to chips colors to red and blue.
- * This class also states weather that hole is available or unavailable.
+ * This class also declares the to chips colors to red and blue.
+ * This class also states whether that hole is available or unavailable.
  * This class also check every row, column vertically, horizontally, and diagonally for a win.
- * @author Haasher
+ * @author Haasher and Chit
  */
 
 public class BoardData {
@@ -19,13 +19,13 @@ private String [][] data;
 private String turn; 
 
 /**
- * On the board, this checks every row and column and returns if the the position if available or not.
+ * On the board, this populates the board cells with a "no color"
  */
 	public BoardData(){
 		this.data = new String[6][7];
 		for(int row=0;row<6;row++){
 			for(int col=0;col<7;col++){
-				data[row][col] = "n/a";
+				data[row][col] = "no color";
 			}
 		}
 	}
@@ -36,7 +36,7 @@ private String turn;
  */
 	public void AddRed(int col){
 		int row = 0;
-		while(data[row][col] != "n/a"){
+		while(data[row][col] != "no color"){
 			row++;
 		}
 		data[row][col] = "red";
@@ -48,7 +48,7 @@ private String turn;
  */
 	public void AddBlue(int col){
 		int row = 0;
-		while(data[row][col] != "n/a"){
+		while(data[row][col] != "no color"){
 			row++;
 		}
 		data[row][col] = "blue";
@@ -58,27 +58,15 @@ private String turn;
  * returns the colour at the specified location
  * @param row
  * @param col
- * @return
+ * @return this.data[row][col]
  */
 	public String GetColor(int row, int col){
 		return this.data[row][col];
 	}
-	
-	
-	/**
-	 * 
-	 */
-	public void Reset(){
-		for(int row=0;row<6;row++){
-			for(int col=0;col<7;col++){
-				data[row][col] = "";
-			}
-		}
-	}
 
 /**
- * 
- * @return
+ * Checks winner and returns winning color
+ * @return winner
  */
 	public String isWin(){
 		
@@ -143,7 +131,7 @@ private String turn;
 
 /**
  * Switches between player, turn by turn
- * @return
+ * @return this.turn
  */	
 	public String getTurn(){
 		return this.turn; 

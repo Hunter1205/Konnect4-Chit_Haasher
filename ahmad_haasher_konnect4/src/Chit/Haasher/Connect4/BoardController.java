@@ -4,7 +4,7 @@ package Chit.Haasher.Connect4;
  * This class switches back and forth from player to player
  * and player to computer.
  * This class also declares the winner between blue and red.
- * @author Haasher
+ * @author Haasher and Chit
  */
 
 public class BoardController {
@@ -14,11 +14,13 @@ public class BoardController {
 	
 /**
  * this determines who goes first randomly, by using build in Math random function
- * @return
+ * sets the turn to blue or red
+ * @return this.turn
  */
 	private String whichPlayerToStart(){
 		double whichPlayerToCommence = Math.random();
-		if(whichPlayerToCommence < 10){ 
+		double randomDecider = Math.random();
+		if(whichPlayerToCommence < randomDecider){ 
 		this.turn  = "blue";
 		return this.turn;
 		} else{
@@ -28,16 +30,8 @@ public class BoardController {
 	}
 
 /**
- * Resets the board to original version
- */
-	public void reset(){
-		board.Reset();
-		this.whichPlayerToStart(); 
-	}
-	
-/**
- * returns red and blue
- * @return
+ * returns Turn
+ * @return this.turn
  */
 	public String getTurn(){
 		return this.turn; 
@@ -58,7 +52,7 @@ public class BoardController {
  * used to communicate the colour in the array to the board
  * @param row
  * @param column
- * @return
+ * @return board.GetColor(row,column)
  */
 	public String getColour(int row, int column){	
 		return board.GetColor(row, column); 
@@ -80,7 +74,7 @@ public class BoardController {
 	
 /**
  * Determines the winner and returns it
- * @return
+ * @return winner
  */
 	public String winner(){
 		String winner ="";
@@ -92,4 +86,3 @@ public class BoardController {
 		return winner; 
 	}
 }
-

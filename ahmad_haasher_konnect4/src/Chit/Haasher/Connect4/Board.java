@@ -1,5 +1,4 @@
 package Chit.Haasher.Connect4;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,10 +12,10 @@ import java.text.*;
 /**
  * This class controls on which mode the player plays. Player vs computer or Player vs Player.
  * This class also controls on which hole is filled based on which button is clicked.
- * this class also displays the buttons for the player to click on which hole to fill.
+ * This class also displays the buttons for the player to click on which hole to fill.
  * and on what to do on which result, of a tie, win, or lose.
  * This class also initializes the buttons for the player to use for inputing the chip onto board
- * @author Haasher
+ * @author Haasher and Chit
  */
 	public class Board extends BoardController{
 
@@ -25,33 +24,35 @@ import java.text.*;
 		private static boolean vsComputer; 
 		private static BoardController controller= new BoardController(); 
 		private static GameAI AI = new GameAI();
+		private static int endGame;
 		
 /**
- * Opens a dialogue box which allows player to select which mode they would like to play
- * @return
+ * Initial dialog box which has instructions, and prompts user to pick which game mode to play
+ * 
+ * @return userChoiceTypeOfPlay
  */
 		public static String chooseGameMode(){
-	userChoiceTypeOfPlay = (String)JOptionPane.showInputDialog(null,"                     Welcome To Connect 4!"+"\n"+
-			 "Fill in four cells in all directions continously to win!"+"\n"+"Tip:Look at Status bar for instructions."+"\n"+
-					"Caution: Computer is Team Red."+"\n"+"Which game mode would you like to play?","Select Game Mode",JOptionPane.PLAIN_MESSAGE,null, whichModeToPlay,"--------");
+	userChoiceTypeOfPlay = (String)JOptionPane.showInputDialog(null,"                     Welcome To Connect 4!"+"\n"+"\n"+
+			 "Fill in four cells in all directions continously to win!"+"\n"+"\n"+"Tip:Look at Status bar for instructions."+"\n"+"\n"+
+					"Caution: Computer is Team Red."+"\n"+"\n"+"Which game mode would you like to play?","Select Game Mode",JOptionPane.PLAIN_MESSAGE,null, whichModeToPlay,"--------");
 
 			return userChoiceTypeOfPlay;	
 		}
 
 /**
- * Declares weather the userChoice was to verse the computer or not
+ * Declares whether the userChoice was to verse the computer or not
  * @param userChoice
  */
-	public static void intialize(String userChoice){
+	public static void intialize(String userChoice)
+	{
 		if(userChoiceTypeOfPlay == whichModeToPlay[1]){
 			vsComputer = true;
-		} else{
+		} else
+		{
 			vsComputer = false;
 		}
 
-/**
- * initialization of board components
- */
+		//initialization of board components
 		BoardGUI theBoard = new BoardGUI();
 		theBoard.setTitle("Connect 4");
 		theBoard.setVisible(true);
@@ -77,10 +78,6 @@ import java.text.*;
 		
 		private int allButtonDisabled = 0;
 
-/**
- * this object relays messages from the GUI to the BoardController class
- */
-
 		//Buttons for each column
 		private JButton Column1 = new JButton("Add");
 		private JButton Column2 = new JButton("Add");
@@ -96,17 +93,15 @@ import java.text.*;
 
 
 		//labels
+		
+		//status bar label
 		private JLabel status = new JLabel("Turn:"+controller.getTurn());
 
 
+		//array of labels to represent the board
+		private JLabel [][]  cells = new JLabel [6][7];
 
-		private JLabel [][]  cells = new JLabel [6][7];//array of labels to repersent the board
-
-		// the reason behind this is to at a later point grab the original colour of each created JLabel 
-		private Color defaultColour; 
-
-
-
+	
 		public BoardGUI(){
 /**
  * create and add buttons to a button panel so they appear in the GUI
@@ -145,8 +140,6 @@ import java.text.*;
 				}
 			}
 
-			defaultColour = cells[0][0].getBackground(); 
-
 			Container container = getContentPane();
 			container.add(boardPanel,BorderLayout.CENTER);
 			container.add(buttonsPanel,BorderLayout.NORTH);
@@ -178,7 +171,7 @@ import java.text.*;
 		}
 
 /**
- * enables all the buttons
+ * enables all buttons
  */
 		private void buttonEnable(){
 			Column1.setEnabled(true);
@@ -210,12 +203,14 @@ import java.text.*;
 		}
 
 /**
- * This method checks to see if there is winner, if so, it displays who won, and disables the buttons
+ * This method checks to see if there is winner, if so, it displays who won
  * @param winningColour
  */
 		public void winner(String winningColour){
+			int winnerEndGame = 1;
+		
 			JFrame frame = new JFrame("End Game");
-			frame.setSize(500,200);
+			frame.setSize(200,150);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 			JPanel panel = new JPanel();
@@ -234,15 +229,40 @@ import java.text.*;
 		}
 
 
-		@Override
-
 /** 
  * 1.Checks to see which button was pressed.	
  * 2.Tells controller to add a chip 
  * 3.Finds out what color placed, relays to user
  * 4.Ensures that not more than 6 chips in one column
+ * 5.Time Game checker
  */
+
 		public void actionPerformed(ActionEvent e) {
+		
+		// checks for tie-game
+			if (allButtonDisabled==6){
+				disableAllButtons();
+				
+				JFrame frame = new JFrame("End Game");
+				frame.setSize(1000,500);
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+				JPanel panel = new JPanel();
+				frame.add(panel);
+
+				JLabel endGame = new JLabel("Tie Game");
+				panel.add(endGame);
+		
+				JButton quit = new JButton("Quit.");
+				panel.add(quit);
+				quit.addActionListener (new QuitListener());
+
+				frame.getContentPane().add(panel);
+				frame.pack();
+				frame.setVisible(true);
+			}
+			
+		// Action of button clicked
 			if(e.getSource()== Column1){
 				controller.add(6);
 				this.updateBoard();
@@ -300,22 +320,24 @@ import java.text.*;
 					allButtonDisabled++;
 				}
 				
-			if (allButtonDisabled==7){
-				System.out.println("Tie Game");
-			}
+			
 		}
-
-			if(vsComputer == true){
+			
+			//AI move
+			if(vsComputer == true)
+			{
 
 				AI.setMove();
 				controller.add(AI.getMove());
 				this.updateBoard();
 			}
+			
+			//status Bar Update for Turn
 			status.setText("Turn:"+controller.getTurn()); 
 
-/**
- * this goes and calls the controller to see if there is a winner, and then the board deals with it
- */
+
+			//calls the controller to see if there is a winner
+			//updates status bar with winner
 			if(controller.winner() != ""){
 				disableAllButtons();
 				this.winner(controller.winner());
@@ -323,6 +345,10 @@ import java.text.*;
 			}
 		}
 		
+		
+		/**
+		 * QuitListener exits the game
+		 */
 		private class QuitListener implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				System.exit(0);
@@ -331,6 +357,3 @@ import java.text.*;
 		}
 	}
 }
-
-
-        
